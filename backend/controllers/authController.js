@@ -97,8 +97,9 @@ const protect = async (req, res, next) => {
         const unverifiedToken = req.headers.authorization.split(" ")[1];
         payload = verifyToken(unverifiedToken);
         user = await User.findById(payload.id);
+        
         if (!user){
-            return next(new AppError(401, "The user belonging to the token no longer exists."))
+            return next(new AppError(401, "The user does not exist."));
         }
         req.user = user;
     }
