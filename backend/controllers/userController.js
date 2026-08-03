@@ -12,6 +12,21 @@ const deleteMe = async (req, res, next) => {
     });
 };
 
+const updateMe = async (req, res, next) => {
+    const userId = req.user.id;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+        new: true, 
+        runValidators: true,
+    });
+
+    return res.status(200).json({
+        status: "success",
+        data: updatedUser,
+    });
+};
+
 export default {
     deleteMe,
+    updateMe,
 };
