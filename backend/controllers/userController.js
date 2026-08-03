@@ -2,8 +2,8 @@ import User from "../models/userModel.js";
 import AppError from "../utils/AppError.js";
 
 const getMe = async (req, res, next) => {
-
     const userId = req.user.id;
+
     const user = await User.findById(userId);
 
     return res.status(200).json({
@@ -17,10 +17,7 @@ const deleteMe = async (req, res, next) => {
 
     await User.findByIdAndDelete(userId);
 
-    return res.status(204).json({
-        status: "success",
-        message: "The user has been successfully deleted."
-    });
+    return res.status(204).send();
 };
 
 export default {
