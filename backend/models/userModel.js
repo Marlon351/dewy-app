@@ -52,7 +52,8 @@ UserSchema.methods.correctPassword = async function(unverifiedPassword){
 UserSchema.pre("save", async function(){
     if (!this.isModified("password")){
         return 
-    }
+    };
+    
     this.confirmPassword = undefined;
     const unhashedPassword = this.password;
     const salt = await bcrypt.genSalt(parseInt(PASSWORD_WORK_FACTOR));

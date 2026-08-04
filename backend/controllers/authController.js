@@ -24,12 +24,13 @@ const register = async (req, res, next) => {
 
     if (!firstName || !lastName || !emailAddress || !password || !confirmPassword){
         return next(new AppError(400, "Please fill out all fields."));
-    }
+    };
 
     const user = await User.findOne({emailAddress});
+
     if (user){
         return next(new AppError(409, "An account already exists with the provided email."));
-    }
+    };
     
     const newUser = await User.create({
         firstName,
@@ -43,9 +44,10 @@ const register = async (req, res, next) => {
 
     const payloadForToken = {
         id: newUser._id,
-    }
+    };
 
     const token = generateToken(payloadForToken);
+
     return res.status(201).json({
         status: "success",
         token,
@@ -58,16 +60,17 @@ const login = async (req, res, next) => {
 
     if (!emailAddress || !password){
         return next(new AppError(400, "Please fill out all fields."));
-    }
+    };
+
     if (!validator.isEmail(emailAddress)){
         return next(new AppError(400, "Please provide a valid email."));
-    }
+    };
 
     const user = await User.findOne({emailAddress}).select("+password");
 
     if (!user){
         return next(new AppError(401, "The email or password you entered is incorrect."));
-    }
+    };
 
     const correctPassword = await user.correctPassword(password);
 
@@ -79,7 +82,7 @@ const login = async (req, res, next) => {
 
     const payloadForToken = {
         id: user._id,
-    }
+    };
 
     const token = generateToken(payloadForToken);
 
@@ -87,12 +90,13 @@ const login = async (req, res, next) => {
         status: "success",
         token,
         data: user,
-    })
+    });
 };
 
 const protect = async (req, res, next) => {
     let payload;
     let user;
+
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")){
         const unverifiedToken = req.headers.authorization.split(" ")[1];
         payload = verifyToken(unverifiedToken);
@@ -100,13 +104,14 @@ const protect = async (req, res, next) => {
         
         if (!user){
             return next(new AppError(401, "The user does not exist."));
-        }
+        };
         req.user = user;
-    }
+    };
 
     if (!payload){
         return next(new AppError(401, "Please log in to proceed."));
-    }
+    };
+    
     next();
 };
 
