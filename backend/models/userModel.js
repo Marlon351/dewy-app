@@ -53,7 +53,7 @@ UserSchema.methods.correctPassword = async function(unverifiedPassword){
 };
 
 UserSchema.methods.createPasswordResetToken = function(){
-    const resetToken = crypto.randomBytes(16).toString('hex');
+    const resetToken = crypto.randomBytes(32).toString('hex');
     const hashedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.passwordResetToken = hashedResetToken;
     this.passwordResetExpires = Date.now() +  1000 * 60 * 10;
