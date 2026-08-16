@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import 'dotenv/config';
 
 const PASSWORD_WORK_FACTOR = process.env.PASSWORD_WORK_FACTOR;
@@ -33,7 +34,6 @@ const UserSchema =  new mongoose.Schema({
     confirmPassword: {
         type: String,
         required: [true, "Please confirm your password."],
-        select: false,
         validate: {
             validator: function(value){
                 return value === this.password;
@@ -41,13 +41,32 @@ const UserSchema =  new mongoose.Schema({
             message: "The passwords do not match.",
         },
     },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
 });
 
 UserSchema.methods.correctPassword = async function(unverifiedPassword){
     const password = this.password;
     const isCorrect = await bcrypt.compare(unverifiedPassword, password);
     return isCorrect;
-}
+};
+
+UserSchema.methods.createPasswordResetToken = function(){
+    const resetToken = crypto.randomBytes(16).toString('hex');
+    const hashedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.passwordResetToken = hashedResetToken;
+    this.passwordResetExpires = Date.now() +  1000 * 60 * 10;
+
+    return resetToken;
+};
+
+UserSchema.methods.resetPassword = function (newPassword, confirmNewPassword){
+    this.password = newPassword;
+    this.confirmPassword = confirmNewPassword;
+    this.passwordResetToken = undefined;
+    this.passwordResetExpires = undefined;
+};
 
 UserSchema.pre("save", async function(){
     if (!this.isModified("password")){
@@ -59,7 +78,14 @@ UserSchema.pre("save", async function(){
     const salt = await bcrypt.genSalt(parseInt(PASSWORD_WORK_FACTOR));
     const hashedPassword = await bcrypt.hash(unhashedPassword, salt);
     this.password = hashedPassword;
-    return
+});
+
+UserSchema.pre("save", async function(){
+    if (!this.isModified("password") || this.isNew){
+        return
+    };
+
+    this.passwordChangedAt = Date.now() - 1000;
 });
 
 const User = mongoose.model("User", UserSchema);
