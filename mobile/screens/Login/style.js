@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
-import globalStyle from "../../assets/styles/globalStyle";
 
-const styles = StyleSheet.create({
+const createStyles = (theme) => StyleSheet.create({
     welcomeText: {
         marginTop: 33,
         fontSize: 30,
         fontWeight: 'bold',
-        color: globalStyle.themeColor,
+        color: theme.colors.primary,
         width: 300,
     },
     inputAndForgotPasswordContainer: {
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
     },
     forgotPasswordText: {
         marginTop: 5,
-        color: '#6A707C',
+        color: theme.colors.primary,
         fontWeight: 'semibold',
     },
     forgotPasswordButtonContainer: {
@@ -35,11 +34,11 @@ const styles = StyleSheet.create({
     },
     registerText: {
         fontSize: 15,
-        color: globalStyle.themeColor,
+        color: theme.colors.primary,
     },
     registerButton: {
         fontSize: 15,
-        color: '#35C2C1',
+        color: theme.colors.primary,
     },
     errorContainer: {
         justifyContent: 'center',
@@ -47,8 +46,8 @@ const styles = StyleSheet.create({
     },
     errorText: {
         fontSize: 15,
-        color: '#FF0000',
+        color: theme.colors.error,
     },
 });
 
-export default styles;
+export default createStyles;

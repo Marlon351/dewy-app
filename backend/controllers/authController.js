@@ -58,7 +58,7 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     const {emailAddress, password} = req.body;
-
+    
     if (!emailAddress || !password){
         return next(new AppError(400, "Please fill out all fields."));
     };
@@ -115,16 +115,14 @@ const forgotPassword = async (req, res, next) => {
     };
     const user = await User.findOne({emailAddress});
 
-    if (!user){
-        return next(new AppError(404, "No user exists with the provided email address."));
+    if (user){
+        const resetToken = user.createPasswordResetCode();
+        await user.save({ validateBeforeSave: false });
+
+        //Send Email
+
+        console.log("Password Reset Token: " + resetToken);
     };
-
-    const resetToken = user.createPasswordResetToken();
-    await user.save({ validateBeforeSave: false });
-
-    //Send Email
-
-    console.log("Password Reset Token: " + resetToken);
 
     return res.status(200).json({
         status: "success",
@@ -133,20 +131,44 @@ const forgotPassword = async (req, res, next) => {
 
 };
 
-const resetPassword = async (req, res, next) => {
-    const { newPassword, confirmNewPassword } = req.body;
-    if (!newPassword || !confirmNewPassword){
-        return next(new AppError(400, "Please provide a new password and confirm it."));
+const verifyEmail = async (req, res, next) => {
+    const { emailAddress, passwordResetCode } = req.body;
+    if (!passwordResetCode || !emailAddress){
+        return next(new AppError(400, "Please provide an email address and its code for verification."));
     };
 
-    const passwordResetToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-    const user = await User.findOne({
-        passwordResetToken,
-        passwordResetExpires: { $gt: Date.now() },
-    });
+    const hashedPasswordResetCode = crypto.createHash('sha256').update(passwordResetCode).digest('hex');
+    const user = await User.findOne({emailAddress, passwordResetCode: hashedPasswordResetCode, passwordResetExpires: { $gt: Date.now() }});
 
     if (!user){
         return next(new AppError(400, "The token is invalid or has expired."));
+    };
+
+    user.passwordResetCode = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false});
+
+    const payloadForToken = {
+        id: user._id,
+    };
+
+    const token = generateToken(payloadForToken);
+
+    return res.status(200).json({
+        status: "success",
+        token,
+        data: user,
+    });
+
+};
+
+const resetMyPassword = async (req, res, next) => {
+    const { newPassword, confirmNewPassword } = req.body;
+    
+    const user = req.user;
+
+    if (!newPassword || !confirmNewPassword){
+        return next(new AppError(400, "Please provide a new password and confirm it."));
     };
 
     user.resetPassword(newPassword, confirmNewPassword);
@@ -168,10 +190,12 @@ const resetPassword = async (req, res, next) => {
     });
 };
 
+
 export default {
     register,
     login,
     protect,
     forgotPassword,
-    resetPassword,
+    verifyEmail,
+    resetMyPassword,
 };

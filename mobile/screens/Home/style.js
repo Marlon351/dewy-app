@@ -1,11 +1,12 @@
 import { StyleSheet } from "react-native";
-import globalStyle from "../../assets/styles/globalStyle";
 
-const styles = StyleSheet.create({
+
+const createStyles = (theme) => StyleSheet.create({
     headerContainer: {
         marginTop: 20,
     },
     headerIntroText: {
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: 400,
         lineHeight: 19,
@@ -14,8 +15,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 600,
         lineHeight: 29,
-        color: globalStyle.themeColor,
+        color: theme.colors.primary,
     },
 });
 
-export default styles;
+export default createStyles;

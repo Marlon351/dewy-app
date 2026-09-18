@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./style";
-import PropTypes from "prop-types";
 import { Pressable, Text } from "react-native";
+import { useTheme } from "@react-navigation/native";
 
 const MenuButton = ({
     onPress = () => {},
@@ -10,10 +10,11 @@ const MenuButton = ({
     color,
 
 }) => {
+    const theme = useTheme();
     const isOutlined = variant === "outlined";
     return (
-        <Pressable onPress={() => onPress()} style={[styles.buttonContainer, { backgroundColor: color, borderColor: color}, isOutlined && { backgroundColor: '#FFFFFF'}]}>
-            <Text style={[styles.label, { color: '#FFFFFF'}, isOutlined && { color: color}]}>{label}</Text>
+        <Pressable onPress={() => onPress()} style={[styles.buttonContainer, { backgroundColor: color, borderColor: color}, isOutlined && { backgroundColor: theme.colors.background}]}>
+            <Text style={[styles.label, { color: "#FFFFFF"}, isOutlined && { color: color}]}>{label}</Text>
         </Pressable>
     )
 };

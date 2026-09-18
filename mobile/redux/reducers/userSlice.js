@@ -4,12 +4,15 @@ const initialState = {
     isLoggedIn: false,
 }
 
-export const User = createSlice({
+export const userSlice = createSlice({
     name: "user",
     initialState: initialState,
     reducers: {
         logIn: (state, action) => {
             return {...state, ...action.payload, ...{isLoggedIn: true}};
+        },
+        resetPassword: (state, action) => {
+            return {...state, ...action.payload};
         },
         resetToInitialState: () => {
             return initialState;
@@ -17,5 +20,5 @@ export const User = createSlice({
     }
 });
 
-export const { resetToInitialState, logIn} = User.actions;
-export default User.reducer;
+export const { resetToInitialState, logIn, resetPassword} = userSlice.actions;
+export default userSlice.reducer;

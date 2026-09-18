@@ -1,20 +1,20 @@
 import { StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
+const createStyles = (theme) => StyleSheet.create({
     inputContainer: {
         width: '100%',
         height: 56,
-        backgroundColor: '#F7F8F9',
+        backgroundColor: theme.colors.card,
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: '#DADADA',
+        borderColor: theme.colors.border,
         paddingHorizontal: 20,
         flexDirection: 'row',
         alignItems: 'center',
 
     },
     input: {
-        color: '#2c1e29',
+        color: theme.colors.text,
         fontSize: 15,
         fontWeight: 'medium',
         flex: 1,
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default styles;
+export default createStyles;

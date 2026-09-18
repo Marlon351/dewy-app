@@ -1,26 +1,33 @@
 import React from "react";
-import { SafeAreaView, Text, View } from "react-native";
-import globalStyle from "../../assets/styles/globalStyle";
+import { SafeAreaView, Switch, Text, View } from "react-native";
 import MenuButton from "../../components/MenuButton/MenuButton";
 import { useSelector } from "react-redux";
 import { Routes } from "../../navigation/Routes";
 import { useDispatch } from "react-redux";
-import { resetToInitialState } from "../../redux/reducers/User";
+import { resetToInitialState } from "../../redux/reducers/userSlice";
+import { useTheme } from "@react-navigation/native";
+import AppScreen from "../../components/AppScreen/AppScreen";
+import { Appearance } from 'react-native';
+import { switchTheme } from "../../redux/reducers/preferencesSlice";
 
 const Account = ({navigation}) => {
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
+    const theme = useTheme();
 
     const handleLogOut = () => {
         dispatch(resetToInitialState());
         navigation.navigate(Routes.Welcome);
-    }
+    };
+
+    const handleThemeSwitch = () => {
+        dispatch(switchTheme());
+
+    };
     return (
-        <SafeAreaView style={[globalStyle.flex, globalStyle.backgroundWhite]}>
-            <View style={globalStyle.horizontalMargin}>
-                <MenuButton label={"Log Out"} color={globalStyle.themeColor} onPress={() => handleLogOut()}/>
-            </View>
-        </SafeAreaView>
+        <AppScreen>
+            <MenuButton label={"Log Out"} color={theme.colors.primary} onPress={() => handleLogOut()}/>
+            <MenuButton label={"Change Theme"} color={theme.colors.primary} onPress={() => handleThemeSwitch()}/>
+        </AppScreen>
     );
 }
 

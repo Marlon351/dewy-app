@@ -1,20 +1,21 @@
 import React from "react";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
-import globalStyle from "../../assets/styles/globalStyle";
 import MenuButton from './../../components/MenuButton/MenuButton';
 import styles from "./style";
 import { Routes } from "../../navigation/Routes";
+import { useTheme } from "@react-navigation/native";
+import AppScreen from "../../components/AppScreen/AppScreen";
 
-const Welcome = ({navigation}) => {
+const Welcome = ({ navigation }) => {
+    const theme = useTheme();
+
     return (
-        <SafeAreaView style={[globalStyle.flex, globalStyle.backgroundWhite]}>
-            <View style={globalStyle.horizontalMargin}>
-                <View style={styles.menu}>
-                    <MenuButton label={"Login"} color={globalStyle.themeColor} onPress={() => navigation.navigate(Routes.Login)}/>
-                    <MenuButton label={"Register"} color={globalStyle.themeColor} variant={"outlined"} onPress={() => navigation.navigate(Routes.Register)}/>
-                </View>
+        <AppScreen>
+            <View style={styles.menu}>
+                <MenuButton label={"Login"} color={theme.colors.primary} onPress={() => navigation.navigate(Routes.Login)} />
+                <MenuButton label={"Register"} color={theme.colors.primary} variant={"outlined"} onPress={() => navigation.navigate(Routes.Register)} />
             </View>
-        </SafeAreaView>
+        </AppScreen>
     )
 }
 

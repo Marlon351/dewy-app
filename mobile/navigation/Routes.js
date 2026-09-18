@@ -7,5 +7,7 @@ export const Routes = {
     Account: 'Account',
     Calendar: 'Calendar',
     Clients: 'Clients',
+    EmailVerification: 'EmailVerification',
+    ResetPassword: 'ResetPassword',
     Main: 'Main',
 };

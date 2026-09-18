@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Routes } from './Routes';
-import globalStyle from './../assets/styles/globalStyle';
 import Welcome from './../screens/Welcome/Welcome';
 import Login from './../screens/Login/Login';
 import Register from './../screens/Register/Register';
@@ -13,17 +12,25 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Calendar from '../screens/Calendar/Calendar';
 import Clients from '../screens/Clients/Clients';
+import EmailVerification from '../screens/EmailVerification/EmailVerification';
+import ResetPassword from '../screens/ResetPassword/ResetPassword';
+import { useTheme } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 const MainBottomTab = createBottomTabNavigator();
 
 export const NonAuthenticated = () => {
   return (
-    <Stack.Navigator initialRouteName={Routes.Welcome} screenOptions={globalStyle.navigationScreen} >
+    <Stack.Navigator initialRouteName={Routes.Welcome} screenOptions={{
+        header: () => null, 
+        headerShown: false
+    }} >
       <Stack.Screen name={Routes.Welcome} component={Welcome} />
       <Stack.Screen name={Routes.Login} component={Login} />
       <Stack.Screen name={Routes.Register} component={Register} />
       <Stack.Screen name={Routes.ForgotPassword} component={ForgotPassword} />
+      <Stack.Screen name={Routes.EmailVerification} component={EmailVerification} />
+      <Stack.Screen name={Routes.ResetPassword} component={ResetPassword}/>
       <Stack.Screen name={Routes.Main} component={Main} />
     </Stack.Navigator>
   );
@@ -31,23 +38,29 @@ export const NonAuthenticated = () => {
 
 export const Authenticated = () => {
   return (
-    <Stack.Navigator initialRouteName={Routes.Main} screenOptions={globalStyle.navigationScreen} >
+    <Stack.Navigator initialRouteName={Routes.Main} screenOptions={{
+        header: () => null, 
+        headerShown: false
+    }} >
       <Stack.Screen name={Routes.Welcome} component={Welcome} />
       <Stack.Screen name={Routes.Login} component={Login} />
       <Stack.Screen name={Routes.Register} component={Register} />
       <Stack.Screen name={Routes.ForgotPassword} component={ForgotPassword} />
+      <Stack.Screen name={Routes.EmailVerification} component={EmailVerification} />
+      <Stack.Screen name={Routes.ResetPassword} component={ResetPassword}/>
       <Stack.Screen name={Routes.Main} component={Main} />
     </Stack.Navigator>
   );
 };
 
 export const Main = () => {
+  const theme = useTheme();
   return (
     <MainBottomTab.Navigator screenOptions={{ headerShown: false }}>
-      <MainBottomTab.Screen name={Routes.Home} component={Home} options={{tabBarActiveTintColor: globalStyle.themeColor, tabBarIcon: ({focused, color, size}) => homeTabIcon(focused, color, size)}}/>
-      <MainBottomTab.Screen name={Routes.Calendar} component={Calendar} options={{tabBarActiveTintColor: globalStyle.themeColor, tabBarIcon: ({focused, color, size}) => calendarTabIcon(focused, color, size)}}/>
-      <MainBottomTab.Screen name={Routes.Clients} component={Clients} options={{tabBarActiveTintColor: globalStyle.themeColor, tabBarIcon: ({focused, color, size}) => clientsTabIcon(focused, color, size)}}/>
-      <MainBottomTab.Screen name={Routes.Account} component={Account} options={{tabBarActiveTintColor: globalStyle.themeColor, tabBarIcon: ({focused, color, size}) => accountTabIcon(focused, color, size)}}/>
+      <MainBottomTab.Screen name={Routes.Home} component={Home} options={{tabBarActiveTintColor: theme.colors.primary, tabBarIcon: ({focused, color, size}) => homeTabIcon(focused, color, size)}}/>
+      <MainBottomTab.Screen name={Routes.Calendar} component={Calendar} options={{tabBarActiveTintColor: theme.colors.primary, tabBarIcon: ({focused, color, size}) => calendarTabIcon(focused, color, size)}}/>
+      <MainBottomTab.Screen name={Routes.Clients} component={Clients} options={{tabBarActiveTintColor: theme.colors.primary, tabBarIcon: ({focused, color, size}) => clientsTabIcon(focused, color, size)}}/>
+      <MainBottomTab.Screen name={Routes.Account} component={Account} options={{tabBarActiveTintColor: theme.colors.primary, tabBarIcon: ({focused, color, size}) => accountTabIcon(focused, color, size)}}/>
     </MainBottomTab.Navigator>
   );
 };

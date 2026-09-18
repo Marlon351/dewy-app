@@ -1,12 +1,14 @@
 import React from "react";
 import { SafeAreaView, Text } from "react-native";
-import globalStyle from "../../assets/styles/globalStyle";
+import { useTheme } from "@react-navigation/native";
+import AppScreen from "../../components/AppScreen/AppScreen";
 
 const Calendar = ({navigation}) => {
+    const theme = useTheme();
     return (
-        <SafeAreaView style={[globalStyle.flex, globalStyle.backgroundWhite]}>
+        <AppScreen>
             <Text>Calendar</Text>
-        </SafeAreaView>
+        </AppScreen>
     );
 };
 

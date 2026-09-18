@@ -1,13 +1,13 @@
 import React from "react";
-import { SafeAreaView, Text } from "react-native";
-import globalStyle from "../../assets/styles/globalStyle";
+import { Text } from "react-native";
+import AppScreen from "../../components/AppScreen/AppScreen";
 
 const Clients = ({navigation}) => {
     return (
-        <SafeAreaView style={[globalStyle.flex, globalStyle.backgroundWhite]}>
+        <AppScreen>
             <Text>Clients</Text>
-        </SafeAreaView>
+        </AppScreen>
     );
-}
+};
 
 export default Clients;
