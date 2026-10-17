@@ -14,11 +14,14 @@ export const userSlice = createSlice({
         resetPassword: (state, action) => {
             return {...state, ...action.payload};
         },
+        updateUser: (state, action) => {
+            return {...state, ...action.payload};
+        },
         resetToInitialState: () => {
             return initialState;
         },
     }
 });
 
-export const { resetToInitialState, logIn, resetPassword} = userSlice.actions;
+export const { resetToInitialState, logIn, resetPassword, updateUser} = userSlice.actions;
 export default userSlice.reducer;

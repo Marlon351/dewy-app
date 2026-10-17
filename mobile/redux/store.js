@@ -6,6 +6,8 @@ import Keychain from 'react-native-keychain';
 import userReducer from './reducers/userSlice';
 import tokenReducer from './reducers/tokenSlice';
 import preferencesReducer from './reducers/preferencesSlice';
+import routineReducer from './reducers/routineSlice';
+import { routineSyncListener } from './routineSync';
 
 export const SecureStorage = {
   setItem: async (key, value) => {
@@ -37,6 +39,7 @@ const persistSecureConfig = {
 const rootReducerPersist = combineReducers({
   user: userReducer,
   preferences: preferencesReducer,
+  routine: routineReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducerPersist);
 
@@ -51,6 +54,7 @@ export const store = configureStore({
     persist: persistedReducer,
     persistSecure: persistedSecureReducer,
   },
+  middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(routineSyncListener.middleware),
 });
 
 export const persistor = persistStore(store);

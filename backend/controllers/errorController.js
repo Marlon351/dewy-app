@@ -12,7 +12,7 @@ const globalErrorHandler = (err, req, res, next) => {
         err = new AppError(401, "The provided token is invalid. Please log in to proceed.");
     }
     else if (err.name == "ValidationError"){
-        err = new AppError(400, err.message.replace("User validation failed: ", ""));
+        err = new AppError(400, err.message.replace(/^\w+ validation failed: /, ""));
     }
     if (err.name == "AppError"){
         return res.status(err.statusCode).json({

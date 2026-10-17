@@ -11,11 +11,13 @@ const UserSchema =  new mongoose.Schema({
         type: String,
         required: [true, "Your first name is a required field."],
         trim: true,
+        maxLength: [50, "Your first name must be 50 characters or less."],
     },
     lastName: {
         type: String,
         required: [true, "Your last name is a required field."],
         trim: true,
+        maxLength: [50, "Your last name must be 50 characters or less."],
     },
     emailAddress: {
         type: String,
@@ -41,9 +43,22 @@ const UserSchema =  new mongoose.Schema({
             message: "The passwords do not match.",
         },
     },
-    passwordChangedAt: Date,
-    passwordResetCode: String,
-    passwordResetExpires: Date,
+    passwordChangedAt: {
+        type: Date,
+        select: false,
+    },
+    passwordResetCode: {
+        type: String,
+        select: false,
+    },
+    passwordResetExpires: {
+        type: Date,
+        select: false,
+    },
+    passwordResetAttempts: {
+        type: Number,
+        select: false,
+    },
 });
 
 UserSchema.methods.correctPassword = async function(unverifiedPassword){
@@ -63,6 +78,7 @@ UserSchema.methods.createPasswordResetCode = function(){
     const hashedResetCode = crypto.createHash('sha256').update(resetCode).digest('hex');
     this.passwordResetCode = hashedResetCode;
     this.passwordResetExpires = Date.now() +  1000 * 60 * 10;
+    this.passwordResetAttempts = 0;
 
     return resetCode;
 };
@@ -72,6 +88,15 @@ UserSchema.methods.resetPassword = function (newPassword, confirmNewPassword){
     this.confirmPassword = confirmNewPassword;
     this.passwordResetCode = undefined;
     this.passwordResetExpires = undefined;
+    this.passwordResetAttempts = undefined;
+};
+
+// Tokens issued before the latest password change are no longer valid
+UserSchema.methods.changedPasswordAfter = function(tokenIssuedAt){
+    if (!this.passwordChangedAt){
+        return false;
+    };
+    return this.passwordChangedAt.getTime() / 1000 > tokenIssuedAt;
 };
 
 UserSchema.pre("save", async function(){

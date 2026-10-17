@@ -7,7 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import MenuButton from "../../components/MenuButton/MenuButton";
 import api from "../../api/user";
 import { Routes } from "../../navigation/Routes";
-import { logIn } from "../../redux/reducers/userSlice";
+import { logIn, resetToInitialState } from "../../redux/reducers/userSlice";
+import { setToken } from "../../redux/reducers/tokenSlice";
+import { loadRoutine } from "../../redux/routineSync";
 import { useTheme } from "@react-navigation/native";
 import AppScreen from "../../components/AppScreen/AppScreen";
 
@@ -28,8 +30,12 @@ const ResetPassword = ({ navigation }) => {
         else {
             const response = await api.resetPassword(user.token, password, confirmPassword);
             if (response.statusCode == 200) {
+                // Swap the short-lived reset token for the new session token and go straight into the app
+                dispatch(resetToInitialState());
+                dispatch(setToken(response.responseInJSON.token));
                 dispatch(logIn(response.responseInJSON.data));
-                navigation.navigate(Routes.Login);
+                dispatch(loadRoutine(response.responseInJSON.token));
+                navigation.navigate(Routes.Main);
             }
             else {
                 setError(response.responseInJSON.message);

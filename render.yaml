@@ -1,0 +1,33 @@
+# Render blueprint for the Dewy API: Dashboard > New > Blueprint, then pick this repo.
+# Secrets are marked sync: false, so Render asks for them when the blueprint is created.
+services:
+  - type: web
+    name: dewy-api
+    runtime: node
+    rootDir: backend
+    plan: starter
+    region: oregon
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "1"
+      - key: JWT_EXPIRES_IN
+        value: 30d
+      - key: PASSWORD_WORK_FACTOR
+        value: "12"
+      - key: DATABASE
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ENCRYPTION_KEY
+        sync: false
+      - key: EMAIL_USERNAME
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false

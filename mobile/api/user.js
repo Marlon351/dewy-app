@@ -1,92 +1,94 @@
-const SERVER_URL = "localhost"
+import request from "./client";
 
 const register = async (firstName, lastName, emailAddress, password, confirmPassword) => {
-    const response = await fetch(`http://${SERVER_URL}:3000/users/register/`, {
+    return request("/users/register/", {
         method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
             firstName,
             lastName,
             emailAddress,
             password,
             confirmPassword,
-        }),
+        },
     });
-    const statusCode = response.status;
-    const responseInJSON = await response.json();
-    return {statusCode, responseInJSON};
-}
+};
 
 const login = async (emailAddress, password) => {
-    const response = await fetch(`http://${SERVER_URL}:3000/users/login/`, {
+    return request("/users/login/", {
         method: "POST",
-        headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
             emailAddress,
             password,
-        }),
+        },
     });
-    const statusCode = response.status;
-    const responseInJSON = await response.json();
-    return {statusCode, responseInJSON};
 };
 
 const forgotPassword = async (emailAddress) => {
-    const response = await fetch(`http://${SERVER_URL}:3000/users/forgotPassword/`, {
+    return request("/users/forgotPassword/", {
         method: "POST",
-        headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
             emailAddress,
-        }),
+        },
     });
-    const statusCode = response.status;
-    const responseInJSON = await response.json();
-    return {statusCode, responseInJSON};
 };
 
 const verifyEmail = async (emailAddress, passwordResetCode) => {
-    const response = await fetch(`http://${SERVER_URL}:3000/users/verifyEmail/`, {
+    return request("/users/verifyEmail/", {
         method: "POST",
-        headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
             emailAddress,
             passwordResetCode,
-        }),
+        },
     });
-    const statusCode = response.status;
-    const responseInJSON = await response.json();
-    return {statusCode, responseInJSON};
 };
 
 const resetPassword = async (token, password, confirmPassword) => {
-
-    const response = await fetch(`http://${SERVER_URL}:3000/users/resetMyPassword`, {
+    return request("/users/resetMyPassword", {
         method: "POST",
-        headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+        token,
+        body: {
             newPassword: password,
             confirmNewPassword: confirmPassword,
-        }),
+        },
     });
-    const statusCode = response.status;
-    const responseInJSON = await response.json();
-    return {statusCode, responseInJSON};
+};
+
+const getMe = async (token) => {
+    return request("/users/getMe", {
+        token,
+    });
+};
+
+const updateMe = async (token, firstName, lastName, emailAddress, currentPassword) => {
+    return request("/users/updateMe", {
+        method: "PATCH",
+        token,
+        body: {
+            firstName,
+            lastName,
+            emailAddress,
+            currentPassword,
+        },
+    });
+};
+
+const updateMyPassword = async (token, currentPassword, newPassword, confirmNewPassword) => {
+    return request("/users/updateMyPassword", {
+        method: "PATCH",
+        token,
+        body: {
+            currentPassword,
+            newPassword,
+            confirmNewPassword,
+        },
+    });
+};
+
+const deleteMe = async (token) => {
+    return request("/users/deleteMe", {
+        method: "DELETE",
+        token,
+    });
 };
 
 export default {
@@ -95,4 +97,8 @@ export default {
     forgotPassword,
     verifyEmail,
     resetPassword,
+    getMe,
+    updateMe,
+    updateMyPassword,
+    deleteMe,
 };

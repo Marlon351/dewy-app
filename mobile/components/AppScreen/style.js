@@ -6,6 +6,7 @@ const createStyles = (theme) => StyleSheet.create({
         backgroundColor: theme.colors.background,
     },
     safeAreaContainer: {
+        flex: 1,
         marginHorizontal: 20,
     },
 });

@@ -1,23 +1,40 @@
 import { StyleSheet } from "react-native";
 
 const createStyles = (theme) => StyleSheet.create({
+    scrollContent: {
+        paddingBottom: 32,
+    },
+    headerContainer: {
+        marginTop: 24,
+    },
+    logo: {
+        height: 56,
+        width: 56,
+        borderRadius: 14,
+    },
     welcomeText: {
-        marginTop: 33,
+        marginTop: 20,
         fontSize: 30,
         fontWeight: 'bold',
-        color: theme.colors.primary,
-        width: 300,
+        letterSpacing: -0.3,
+        color: theme.colors.text,
+    },
+    subHeaderText: {
+        marginTop: 8,
+        fontSize: 16,
+        lineHeight: 22,
+        color: theme.colors.secondaryText,
     },
     inputAndForgotPasswordContainer: {
-        marginTop: 57,
+        marginTop: 32,
     },
     inputContainer: {
-        gap: 20,        
+        gap: 18,
     },
     forgotPasswordText: {
-        marginTop: 5,
+        marginTop: 10,
         color: theme.colors.primary,
-        fontWeight: 'semibold',
+        fontWeight: 600,
     },
     forgotPasswordButtonContainer: {
         alignItems: 'flex-end',
@@ -28,24 +45,27 @@ const createStyles = (theme) => StyleSheet.create({
         marginTop: 68,
     },
     registerContainer: {
-        marginTop: 83,
+        marginTop: 28,
         justifyContent: 'center',
         flexDirection: 'row',
     },
     registerText: {
         fontSize: 15,
-        color: theme.colors.primary,
+        color: theme.colors.secondaryText,
     },
     registerButton: {
         fontSize: 15,
+        fontWeight: 600,
         color: theme.colors.primary,
     },
     errorContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
+        padding: 12,
+        borderRadius: 10,
+        backgroundColor: theme.colors.errorLight,
     },
     errorText: {
-        fontSize: 15,
+        fontSize: 14,
+        textAlign: 'center',
         color: theme.colors.error,
     },
 });

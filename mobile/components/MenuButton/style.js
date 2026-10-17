@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
+        borderRadius: 12,
         borderWidth: 1,
     },
     buttonContainerSecondary: {
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
+        borderRadius: 12,
         borderWidth: 1,
     },
     label: {
